@@ -13,7 +13,7 @@ public:
 	 *
 	 * \param[in] divisor SCK clock divider relative to the system clock.
 	 */
-	void Init(uint8_t divisor);
+	void Init(uint8_t divisor, uint8_t SPIMode);
 	/** Receive a byte.
 	 *
 	 * \return The byte.
