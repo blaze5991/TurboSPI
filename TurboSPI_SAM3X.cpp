@@ -137,12 +137,12 @@ void TurboSPI::Begin()
 #endif  // USE_SAM3X_BUS_MATRIX_FIX
 #endif  // USE_SAM3X_DMAC
 
-	Init(2);
+	Init(21,0);
 }
 
 //------------------------------------------------------------------------------
 //  initialize SPI controller
-void TurboSPI::Init(uint8_t sckDivisor)
+void TurboSPI::Init(uint8_t sckDivisor,uint8_t SPIMode)
 {
 	uint8_t scbr = sckDivisor;
 	Spi* pSpi = SPI0;
@@ -152,8 +152,10 @@ void TurboSPI::Init(uint8_t sckDivisor)
 	pSpi->SPI_CR = SPI_CR_SWRST;
 	// no mode fault detection, set master mode
 	pSpi->SPI_MR = SPI_PCS(SPI_CHIP_SEL) | SPI_MR_MODFDIS | SPI_MR_MSTR;
-	// mode 0, 8-bit,
-	pSpi->SPI_CSR[SPI_CHIP_SEL] = SPI_CSR_SCBR(scbr) | SPI_CSR_NCPHA;
+	//Modification: SPI_MODE Change
+	pSpi -> SPI_CSR[SPI_CHIP_SEL]|= SPIMode;
+	//mode SPIMode, 8-bit,
+	pSpi->SPI_CSR[SPI_CHIP_SEL] |= SPI_CSR_SCBR(scbr) | SPI_CSR_NCPHA;
 	// enable SPI
 	pSpi->SPI_CR |= SPI_CR_SPIEN;
 }
